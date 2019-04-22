@@ -1,0 +1,111 @@
+---
+title: "Mediation"
+author: "Patrick Wilson MPH"
+date: '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+solarized_dark(
+  code_font_family = "Fira Code",
+  code_font_url    = "https://cdn.rawgit.com/tonsky/FiraCode/1.204/distr/fira_code.css"
+)
+```
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = FALSE)
+
+library(arsenal)
+library(tidyverse)
+library(broom)
+library(knitr)
+library(kableExtra)
+```
+
+## What we hope to go over
+
+--
+
+- Background 
+
+--
+
+- Causal Estimands and DAGS
+
+--
+
+- Mediation Assessment and Heuristics
+
+
+--
+
+- Example of Mediation Analyses
+
+--
+
+- Resources
+
+---
+class: inverse, middle, center
+background-size: contain
+
+#What is mediation analyses
+
+> _"The presence or absence of statistical interaction between two factors depends on the scale with which one chooses to measure their association" -Modern Epidemiology_
+
+
+---
+##Overview 
+
+
+---
+##What does Causal inference add?
+
+
+---
+##What kind of questions can you ask?
+
+- Pain Example
+
+- Depression Example
+
+- Biomarker Example
+
+- Reproductive Epidemiology Example
+
+- Social Epidemiology Example
+
+
+
+- Let us use a classic example in observational epidemiology to illustrate the issue of scale
+
+- Here you have a hypothetical cohort looking at the interaction between smoking and asbestos on the effect of getting lung cancer per 1,000 persons.
+
+
+```{r, echo = FALSE}
+data_2b2 <- data.frame( status = c("Non-smoker", "Smoker"), `No Asbestos` = c("$p_{00}$ = 1", "$p_{01}$ = 10"), `Asbestos` = c("$p_{10}$ = 3", "$p_{11}$ = 20")) %>% 
+  rename(` ` = status)
+
+kable(data_2b2, "html", escape =F) %>% 
+  kable_styling("striped", full_width = F, font_size = 20) 
+```
+
+- With these four risks you can calculate everything you need to assess interaction.
+
+
+
+

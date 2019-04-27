@@ -63,21 +63,41 @@ library(kableExtra)
 class: inverse, middle, center
 background-size: contain
 
-#What is mediation analyses
+# What is mediation analyses
 
 > _"The presence or absence of statistical interaction between two factors depends on the scale with which one chooses to measure their association" -Modern Epidemiology_
 
 
 ---
-##Overview 
+## Overview 
+
+Basic defintion of Mediation analyses. Usually constrated with interaction analyses. The how vs for whom quote
+
+"How does the cause affect the outcome?"
+"For whom does and effect occur?"
+
+Well suited for understanding mechanisms 
 
 
 ---
-##What does Causal inference add?
+Formalized in Baron & Kenny with linear regression (1986), 
+
+simple model known as the product method. 
 
 
 ---
-##What kind of questions can you ask?
+## What does Causal inference add?
+
+Inherently a causal question 
+Baron and Kenny approach limitations with respect to interactions and nonlinearitiies
+
+PO framework great to integrate these ideas along with proper confounding control 
+
+Greenland Robins and Pearl subsequently formulated Causal mediation analyses and developed the causal notion of Direct effect and Indirect effect.
+
+
+---
+## What kind of questions can you ask?
 
 - Pain Example
 
@@ -105,6 +125,104 @@ kable(data_2b2, "html", escape =F) %>%
 ```
 
 - With these four risks you can calculate everything you need to assess interaction.
+
+
+
+---
+class: inverse, middle, center
+background-size: contain
+
+# What is mediation analyses
+
+> _"The presence or absence of statistical interaction between two factors depends on the scale with which one chooses to measure their association" -Modern Epidemiology_
+
+
+---
+## Causal Estimands and DAGS 
+
+
+--The DAG
+
+
+--Regression model in LaTeX
+
+
+Interpretation and additional statistics
+
+
+---
+## The Assumptions
+
+-- More complex DAG
+
+--Assumptions
+ 1. No Treatment-Outcome Confounding
+ 2. No Mediator-Outcome Confounding
+ 3. No Treatment-Mediator Confounding
+ 4. No Mediator-Outcome confounding that is an effect of treatment (MSM)
+ 5. Temporal Ordering
+
+
+---
+class: inverse, middle, center
+background-size: contain
+
+# What is mediation analyses
+
+> _"The presence or absence of statistical interaction between two factors depends on the scale with which one chooses to measure their association" -Modern Epidemiology_
+
+
+
+
+---
+## Mediation Assessment and Heuristics
+
+-- Good tips and tricks you need to think about
+-- This is specific to mediation but could have broader applications
+
+
+
+---
+## A tale of two dags 
+
+two dag pics 
+
+Should I Adjust for Z or no? 
+Even if you or your investigator is not interested in Mediation you could be adjusting for a variable that is on the pathway and therefore creating a biased estimate of your effect
+
+
+
+
+
+
+
+---
+## Some good rules of thumb
+
+muddled variables DISTINCT CONSTRUCTS 
+
+muddled associations (oncology example)
+
+Although design is not crucial it helps
+
+See a lot of mediation analyses done in cross-sectional data 
+
+Words of advice, mediation is worse for fishing, so most of your work you will need to do is not 
+
+musings on causal estimation vs causal discovery
+
+How to choose between interaction and mediation
+
+
+
+--
+## Data example 
+
+
+
+```{r}
+put awesome data here 
+```
 
 
 

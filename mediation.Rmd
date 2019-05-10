@@ -71,29 +71,45 @@ background-size: contain
 ---
 ## Overview 
 
-Basic defintion of Mediation analyses. Usually constrated with interaction analyses. The how vs for whom quote
-
-"How does the cause affect the outcome?"
-"For whom does and effect occur?"
-
-Well suited for understanding mechanisms 
-
+Mediation seeks to describe the mechanism by which a cause affects an outcome
 
 ---
-Formalized in Baron & Kenny with linear regression (1986), 
+In this model an intervention is theorized to affect an outcome through another variable known as a mediator
 
-simple model known as the product method. 
+---
+Formalized in Baron & Kenny with linear regression (1986) 
+
+---
+The Baron/Kenny model is actually two regression models 
+
+$$E(M|a,c) = \beta_0 + \beta_1a + \beta_2c$$
+
+$$E(Y|m,a,c) = \theta_0 + \theta_1a + \theta_2m + \theta_3c$$
+
+Where $\theta_1$ is the "direct" effect and $\beta_1\theta_2$ is the "indirect" effect
 
 
 ---
 ## What does Causal inference add?
 
-Inherently a causal question 
+---
+Mediation is inherently a causal question, and additional assumptions are needed
 Baron and Kenny approach limitations with respect to interactions and nonlinearitiies
 
-PO framework great to integrate these ideas along with proper confounding control 
+---
+Given this notiion it is makes sense to try to measure mediation through a potential outcome or counterfactual framework
 
-Greenland Robins and Pearl subsequently formulated Causal mediation analyses and developed the causal notion of Direct effect and Indirect effect.
+---
+Greenland, Robins, and Pearl formulated Causal mediation analyses and developed the causal notion of direct effect and indirect effect.
+
+
+---
+##Benefits Include....
+
+---
+Principled approach that states assumptions clearly
+
+PO framework is generalized so models can be easily extended to handle nonlinearities and interactions
 
 
 ---
@@ -103,12 +119,15 @@ Greenland Robins and Pearl subsequently formulated Causal mediation analyses and
 
 - Depression Example
 
+a randomized cognitive behavioral therapy intervention was found to have a beneficial effect on drpression symptoms after 3 months follou up However it was noted that the intevention also had an effect on the use of antidepresseants.  Did the benefical effect on depressive symtpoms simply because it led to high antidepresssant use or did the CBT affect depressive symptoms throug hother pathways (page 89)
+
 - Biomarker Example
 
 - Reproductive Epidemiology Example
 
-- Social Epidemiology Example
+We focus our exploration of mediating effects relating abruption (exposure) and perinatal mortality (outcome) and of the role preterm delivery (mediator) plays in this relation. We seek to address 2 important issues: 1) Is the increased risk of mortality in relation to abruption entirely dependent (i.e., mediated) on preterm delivery? and 2) If not, what proportion of the increased mortality risk is directly the consequence of abruption through pathways other than preterm delivery? (Placental Abruption and Perinatal Mortality With Preterm Delivery as a Mediator: Disentangling Direct and Indirect Effects)
 
+- Social Epidemiology Example
 
 
 - Let us use a classic example in observational epidemiology to illustrate the issue of scale
@@ -132,10 +151,6 @@ kable(data_2b2, "html", escape =F) %>%
 class: inverse, middle, center
 background-size: contain
 
-# What is mediation analyses
-
-> _"The presence or absence of statistical interaction between two factors depends on the scale with which one chooses to measure their association" -Modern Epidemiology_
-
 
 ---
 ## Causal Estimands and DAGS 
@@ -149,18 +164,54 @@ background-size: contain
 
 Interpretation and additional statistics
 
+The three estimands of interest are the controlled direct effect (CDE), natural direct effect (NDE), and natural indirect effect (NIE)
+
+$$CDE(m) = \theta_1 +\theta_3m(a-a^*)$$
+
+How much the outcome would change on average if the mediator were fixed at level m uniformly in the population but the treatment were changed from level $a^*=0$ to $a=1$ 
+
+
+$$NDE = (\theta_1 +\theta_3\beta_0 + \theta_3\beta_1a^* + \theta_3\beta_2c)(a-a^*)$$
+How much the outcome would change if the exposure were set at level $a=1$ vs. $a^*=0$  but for each individual the mediator were kept at the level it would have taken, for that indivdual in the absence of the exposure.
+
+$$NIE = (\theta_2\beta_1 + \theta_3\beta_1a)(a-a^*)$$
+How much the outcome would change on average if the exposure were fixed at level a=1 but the mediator were changed from the level it would take if a=0 to the level it would take if a=0
 
 ---
-## The Assumptions
+## The Assumptions for Confounding
 
 -- More complex DAG
 
 --Assumptions
+
+-- Your first DAG
+
  1. No Treatment-Outcome Confounding
+ 
+-- Your Second DAG
  2. No Mediator-Outcome Confounding
+ 
+-- Third DAG
+
  3. No Treatment-Mediator Confounding
+
+-- Fourth DAG
  4. No Mediator-Outcome confounding that is an effect of treatment (MSM)
- 5. Temporal Ordering
+ 
+
+
+---
+##Nonlinear 
+
+```{r}
+#DT Table example
+```
+
+
+---
+##Interaction
+
+Example of interaction, principle reason for using counterfactual 
 
 
 ---
@@ -177,10 +228,8 @@ background-size: contain
 ---
 ## Mediation Assessment and Heuristics
 
--- Good tips and tricks you need to think about
--- This is specific to mediation but could have broader applications
-
-
+-- Good tips and tricks to think about
+-- This is specific to mediation but has broader applications to any causal inference problem
 
 ---
 ## A tale of two dags 
@@ -189,10 +238,6 @@ two dag pics
 
 Should I Adjust for Z or no? 
 Even if you or your investigator is not interested in Mediation you could be adjusting for a variable that is on the pathway and therefore creating a biased estimate of your effect
-
-
-
-
 
 
 
@@ -211,19 +256,28 @@ Words of advice, mediation is worse for fishing, so most of your work you will n
 
 musings on causal estimation vs causal discovery
 
-How to choose between interaction and mediation
 
-
-
---
+---
 ## Data example 
 
 
 
 ```{r}
-put awesome data here 
+#put awesome data here 
 ```
 
 
 
+---
+##Software
+
+Mediation macro TW LW
+Proc casualmed 
+mediation in R
+
+
+
+
+---
+##References
 

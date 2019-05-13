@@ -5,14 +5,15 @@ date: "08/16/2018"
 output:
   xaringan::moon_reader:
     seal: false
+    css: xaringan-themer.css
 ---
 class: inverse, center, middle
 background-image: url(lance-grandahl-1058975-unsplash.jpg)
 background-size: cover
 
-<img src="mediation.png"/>
+<img src="mediation_title.png"/>
 
-.large[Patrick Wilson | Causal Inference Forum | May 17, 2019]
+Patrick Wilson | Causal Inference Forum | May 17, 2019
 
 
 ```{r setup, include=FALSE}
@@ -24,6 +25,17 @@ library(tidyverse)
 library(broom)
 library(knitr)
 library(kableExtra)
+library(xaringanthemer)
+
+duo(primary_color = "#1F4257", secondary_color = "#F97B64",
+    title_slide_text_color = "#ffffff",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Droid Mono")
+  
+)
+
+
 ```
 
 
@@ -130,17 +142,17 @@ background-size: cover
 ---
 ## Depression
 
-> A randomized cognitive behavioral therapy (CBT) intervention estimated an effect on depression symptoms after 3 months of follow up. However, it was noted that the intervention also had an effect on adherance to their antidepressants regimen. Did the beneficial effect of CBT on depressive symptoms because it led to  antidepressant adherance or did CBT affect depressive symptoms through other pathways?
+> *A randomized cognitive behavioral therapy (CBT) intervention estimated an effect on depression symptoms after 3 months of follow up. However, it was noted that the intervention also had an effect on adherance to their antidepressants regimen. Did the beneficial effect of CBT on depressive symptoms because it led to  antidepressant adherance or did CBT affect depressive symptoms through other pathways?*
 
 ---
 ## Clinical Biomarker
 
-> For example, if one wishes to evaluate an intervention on smoking in the prevention of cardiovascular disease. A possible mechanism is that smoking impacts changes in lipid levels causing hyperlipidemia. One might ask what fraction of smoking's effect could be eliminated by eliminating hyperlipdemia through diet and or medication.  
+> *For example, if one wishes to evaluate an intervention on smoking in the prevention of cardiovascular disease. A possible mechanism is that smoking impacts changes in lipid levels causing hyperlipidemia. One might ask what fraction of smoking's effect could be eliminated by eliminating hyperlipdemia through diet and or medication.*  
 
 ---
 ## Reproductive Epidemiology
 
-> A recent analysis focused on the mediating effects relating placental abruption (exposure) and perinatal mortality (outcome) through the role of preterm delivery (mediator). The investigators sought to address 2 important issues: 1) Is the increased risk of mortality in relation to abruption entirely dependent (i.e., mediated) on preterm delivery? and 2) If not, what proportion of the increased mortality risk is directly the consequence of abruption through pathways other than preterm delivery?
+> *A recent analysis focused on the mediating effects relating placental abruption (exposure) and perinatal mortality (outcome) through the role of preterm delivery (mediator). The investigators sought to address 2 important issues: 1) Is the increased risk of mortality in relation to abruption entirely dependent (i.e., mediated) on preterm delivery? and 2) If not, what proportion of the increased mortality risk is directly the consequence of abruption through pathways other than preterm delivery?*
 
 ---
 ## Social Epidemiology Example
@@ -148,21 +160,19 @@ background-size: cover
 ---
 ## Genetic Epidemiology 
 
-> Research has found associations between genetic variants on chromosome 15q25.1 and lung cancer. These variants were also known to be associated with smoking. Not only was there a hypothesis of mediation but also that the variant may increase indivduals'vulnerability to the harmful effect of smoking (gene-environment interaction). 
+> *Research has found associations between genetic variants on chromosome 15q25.1 and lung cancer. These variants were also known to be associated with smoking. Not only was there a hypothesis of mediation but also that the variant may increase indivduals'vulnerability to the harmful effect of smoking (gene-environment interaction).* 
 
 ---
 class: inverse, middle, center
 background-image: url(lance-grandahl-1058975-unsplash.jpg)
 background-size: cover
 
-
----
 # Causal Estimands and DAGS 
 
-
+---
 ## The DAG
-```{r, out.width = "95%"}
-knitr::include_graphics("uninformative_table.png")
+```{r, out.width = "85%"}
+knitr::include_graphics("mediation_triangle.png")
 ```
 
 
@@ -199,7 +209,7 @@ $$Y_{a=1,m=m} - Y_{a=0,m=m}$$
 
 In layman's terms:
 
-If we intervened to set the mediator to a certain level what is the effect of intervention?
+*What is the effect of intervention, if we intervened to set the mediator to a certain level?*
 
 ---
 ##Natural Direct Effect
@@ -209,7 +219,9 @@ How much the outcome would change if the exposure were set at level $a=1$ vs. $a
 
 $$Y_{a=1,~m=M_0} - Y_{a=0,~m=M_0}$$
 
-In layman's terms: If we intervened to block the effect of a mediator what is the effect of intervention?
+In layman's terms: 
+
+*If we intervened to block the effect of a mediator what is the effect of intervention?*
 
 ---
 ## Natural Indirect Effect
@@ -220,13 +232,15 @@ How much the outcome would change on average if the exposure were fixed at level
 
 $$Y_{a=1,~m=M_1} - Y_{a=1,~m=M_0}$$
 
-In layman's terms: What is the effect of the intervention by changing the mediator?
+In layman's terms: 
+
+*What is the effect of the intervention by changing the mediator?*
 
 
 ---
 ## Dervivates
 
--- 
+--
 Total effect
 $$ TE = NDE + NIE   $$
 --
@@ -238,11 +252,7 @@ Proportion Eliminated
 $$PE(m) = \frac{TE - CDE(m)}{TE} $$
 
 
----
-name: Assumptions
-class: center, middle, inverse
-background-image: url(http://bit.ly/arm-greens)
-background-size: cover
+
 
 
 ---
@@ -277,41 +287,42 @@ kable(models, "html", escape = F) %>%
 ---
 ##Integrate Interaction
 
+--
 Example of interaction, principle reason for using counterfactual 
 
 
+
+
 ---
-name: Assumptions
 class: center, middle, inverse
-background-image: url(http://bit.ly/arm-greens)
+background-image: url(lance-grandahl-1058975-unsplash.jpg)
 background-size: cover
 
+#Assumptions
 
+---
 ## No Treatment-Outcome Confounding
-
-```{r, out.width = "95%"}
-knitr::include_graphics("uninformative_table.png")
+```{r, med1, out.width = "95%"}
+knitr::include_graphics("mediator_confound1.png")
 ```
 
- 
+---
+--- 
 ## No Mediator-Outcome Confounding
- 
-```{r, out.width = "95%"}
-knitr::include_graphics("uninformative_table.png")
+```{r, med2, out.width = "95%"}
+knitr::include_graphics("mediator_confound2.png")
 ```
  
-
+---
 ## No Treatment-Mediator Confounding
-
-```{r, out.width = "95%"}
-knitr::include_graphics("uninformative_table.png")
+```{r, med3, out.width = "95%"}
+knitr::include_graphics("mediator_confound3.png")
 ```
 
-
+---
 ## No Mediator-Outcome Confounding That is an Effect of Treatment
- 
-```{r, out.width = "95%"}
-knitr::include_graphics("uninformative_table.png")
+```{r, med4, out.width = "95%"}
+knitr::include_graphics("mediator_confound4.png")
 ```
 
 
@@ -326,35 +337,40 @@ background-size: contain
 
 .pull-left[
 
-```{r, out.width = "95%"}
-knitr::include_graphics("uninformative_table.png")
+```{r}
+knitr::include_graphics("mediation_triangle.png")
 ```
 
 
 ]
 .pull-right[
 
-```{r, out.width = "95%"}
-knitr::include_graphics("uninformative_table.png")
+```{r}
+knitr::include_graphics("confounder_triangle.png")
 ```
 
 
 ]
 
+
 ---
 ## Assessing Mediation
 
 --
-Should you adjust for Z? 
+
+- Should you adjust for Z? 
 
 --
-*Obviously* you wouldn't adjust if it is a mediator but you would adjust of a confounder 
+
+- One wouldn't adjust if it is a mediator but you would adjust of a confounder 
 
 --
-How do you tell? 
+
+- How do you tell? 
 
 --
-Even if you or your investigator is not interested in Mediation *per se* you could be adjusting for a variable that is on the pathway and therefore creating a biased estimate of your effect
+
+- Even if you or your investigator is not interested in Mediation *per se* you could be adjusting for a variable that is on the pathway and therefore creating a biased estimate of your effect
 
 
 
@@ -362,15 +378,18 @@ Even if you or your investigator is not interested in Mediation *per se* you cou
 ## Some good rules of thumb
 
 --
-Study design and the paramount importance of time
+
+- Study design and the paramount importance of time
 
 
 --
-Measuring distinct constructs
+
+- Measuring distinct constructs
 
 
 --
-Causal discovery? And the fishing problem
+
+- Causal discovery? And the fishing problem
 
 
 ---
@@ -387,9 +406,9 @@ Causal discovery? And the fishing problem
 ---
 ##Software
 
-Mediation macro TW LW
-Proc casualmed 
-mediation in R
+- Mediation macro TW LW
+- Proc casualmed 
+- mediation in R
 
 
 

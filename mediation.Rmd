@@ -1,28 +1,18 @@
 ---
 title: "Mediation"
 author: "Patrick Wilson MPH"
-date: '`r Sys.Date()`'
+date: "08/16/2018"
 output:
   xaringan::moon_reader:
-    lib_dir: libs
-    css: xaringan-themer.css
-    nature:
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
+    seal: false
 ---
+class: inverse, center, middle
+background-image: url(lance-grandahl-1058975-unsplash.jpg)
+background-size: cover
 
-```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
-```
+<img src="mediation.png"/>
 
-```{r xaringan-themer, include=FALSE}
-library(xaringanthemer)
-solarized_dark(
-  code_font_family = "Fira Code",
-  code_font_url    = "https://cdn.rawgit.com/tonsky/FiraCode/1.204/distr/fira_code.css"
-)
-```
+.large[Patrick Wilson | Causal Inference Forum | May 17, 2019]
 
 
 ```{r setup, include=FALSE}
@@ -36,10 +26,21 @@ library(knitr)
 library(kableExtra)
 ```
 
-## What we hope to go over
+
+---
+name: greens-cover
+class: center, middle, inverse
+background-image: url(lance-grandahl-1058975-unsplash.jpg)
+background-size: cover
+
+
+# What We Hope to Go Over
+
+
+---
+# Objectives
 
 --
-
 - Background 
 
 --
@@ -61,200 +62,315 @@ library(kableExtra)
 
 ---
 class: inverse, middle, center
-background-size: contain
+background-image: url(lance-grandahl-1058975-unsplash.jpg)
+background-size: cover
 
-# What is mediation analyses
-
-> _"The presence or absence of statistical interaction between two factors depends on the scale with which one chooses to measure their association" -Modern Epidemiology_
+# What is Mediation Analyses?
 
 
 ---
 ## Overview 
+--
 
-Mediation seeks to describe the mechanism by which a cause affects an outcome
+- Mediation seeks to describe the mechanism by which a cause affects an outcome
 
----
-In this model an intervention is theorized to affect an outcome through another variable known as a mediator
+--
 
----
-Formalized in Baron & Kenny with linear regression (1986) 
+- In this model an intervention is theorized to affect an outcome through another variable known as a mediator
 
----
-The Baron/Kenny model is actually two regression models 
+--
 
-$$E(M|a,c) = \beta_0 + \beta_1a + \beta_2c$$
+- One can then decompose intervention effects into through changing the mediator which changes the outcome (indirect effect) and through some other mechinanism or set of mechanisms (direct effect)
 
-$$E(Y|m,a,c) = \theta_0 + \theta_1a + \theta_2m + \theta_3c$$
+--
 
-Where $\theta_1$ is the "direct" effect and $\beta_1\theta_2$ is the "indirect" effect
+- Formalized in Baron & Kenny with linear regression (1986) 
+
 
 
 ---
 ## What does Causal inference add?
 
----
-Mediation is inherently a causal question, and additional assumptions are needed
+--
+
+- Mediation is inherently a causal question, and additional assumptions are needed
 Baron and Kenny approach limitations with respect to interactions and nonlinearitiies
 
----
-Given this notiion it is makes sense to try to measure mediation through a potential outcome or counterfactual framework
+--
 
----
-Greenland, Robins, and Pearl formulated Causal mediation analyses and developed the causal notion of direct effect and indirect effect.
+- Given this notion it is makes sense to try to measure mediation through a potential outcome or counterfactual framework
+
+--
+
+- Greenland, Robins, and Pearl formulated Causal mediation analyses and developed the causal notion of direct effect and indirect effect.
 
 
 ---
 ##Benefits Include....
 
----
-Principled approach that states assumptions clearly
+--
 
-PO framework is generalized so models can be easily extended to handle nonlinearities and interactions
+- Principled approach that states assumptions clearly
 
+--
 
----
-## What kind of questions can you ask?
-
-- Pain Example
-
-- Depression Example
-
-a randomized cognitive behavioral therapy intervention was found to have a beneficial effect on drpression symptoms after 3 months follou up However it was noted that the intevention also had an effect on the use of antidepresseants.  Did the benefical effect on depressive symtpoms simply because it led to high antidepresssant use or did the CBT affect depressive symptoms throug hother pathways (page 89)
-
-- Biomarker Example
-
-- Reproductive Epidemiology Example
-
-We focus our exploration of mediating effects relating abruption (exposure) and perinatal mortality (outcome) and of the role preterm delivery (mediator) plays in this relation. We seek to address 2 important issues: 1) Is the increased risk of mortality in relation to abruption entirely dependent (i.e., mediated) on preterm delivery? and 2) If not, what proportion of the increased mortality risk is directly the consequence of abruption through pathways other than preterm delivery? (Placental Abruption and Perinatal Mortality With Preterm Delivery as a Mediator: Disentangling Direct and Indirect Effects)
-
-- Social Epidemiology Example
-
-
-- Let us use a classic example in observational epidemiology to illustrate the issue of scale
-
-- Here you have a hypothetical cohort looking at the interaction between smoking and asbestos on the effect of getting lung cancer per 1,000 persons.
-
-
-```{r, echo = FALSE}
-data_2b2 <- data.frame( status = c("Non-smoker", "Smoker"), `No Asbestos` = c("$p_{00}$ = 1", "$p_{01}$ = 10"), `Asbestos` = c("$p_{10}$ = 3", "$p_{11}$ = 20")) %>% 
-  rename(` ` = status)
-
-kable(data_2b2, "html", escape =F) %>% 
-  kable_styling("striped", full_width = F, font_size = 20) 
-```
-
-- With these four risks you can calculate everything you need to assess interaction.
-
+- PO framework is generalized so models can be easily extended to handle nonlinearities and interactions
 
 
 ---
 class: inverse, middle, center
-background-size: contain
+background-image: url(lance-grandahl-1058975-unsplash.jpg)
+background-size: cover
+
+# What kind of questions can you ask?
+
+---
+## Pain Example
+
+---
+## Depression
+
+> A randomized cognitive behavioral therapy (CBT) intervention estimated an effect on depression symptoms after 3 months of follow up. However, it was noted that the intervention also had an effect on adherance to their antidepressants regimen. Did the beneficial effect of CBT on depressive symptoms because it led to  antidepressant adherance or did CBT affect depressive symptoms through other pathways?
+
+---
+## Clinical Biomarker
+
+> For example, if one wishes to evaluate an intervention on smoking in the prevention of cardiovascular disease. A possible mechanism is that smoking impacts changes in lipid levels causing hyperlipidemia. One might ask what fraction of smoking's effect could be eliminated by eliminating hyperlipdemia through diet and or medication.  
+
+---
+## Reproductive Epidemiology
+
+> A recent analysis focused on the mediating effects relating placental abruption (exposure) and perinatal mortality (outcome) through the role of preterm delivery (mediator). The investigators sought to address 2 important issues: 1) Is the increased risk of mortality in relation to abruption entirely dependent (i.e., mediated) on preterm delivery? and 2) If not, what proportion of the increased mortality risk is directly the consequence of abruption through pathways other than preterm delivery?
+
+---
+## Social Epidemiology Example
+
+---
+## Genetic Epidemiology 
+
+> Research has found associations between genetic variants on chromosome 15q25.1 and lung cancer. These variants were also known to be associated with smoking. Not only was there a hypothesis of mediation but also that the variant may increase indivduals'vulnerability to the harmful effect of smoking (gene-environment interaction). 
+
+---
+class: inverse, middle, center
+background-image: url(lance-grandahl-1058975-unsplash.jpg)
+background-size: cover
 
 
 ---
-## Causal Estimands and DAGS 
+# Causal Estimands and DAGS 
 
 
---The DAG
+## The DAG
+```{r, out.width = "95%"}
+knitr::include_graphics("uninformative_table.png")
+```
 
 
---Regression model in LaTeX
 
 
-Interpretation and additional statistics
+---
+## Estimands 
 
-The three estimands of interest are the controlled direct effect (CDE), natural direct effect (NDE), and natural indirect effect (NIE)
+-The Baron/Kenny model is actually two regression models 
+
+
+$$E(M|a,c) = \beta_0 + \beta_1a + \beta_2c$$
+
+
+$$E(Y|m,a,c) = \theta_0 + \theta_1a + \theta_2m + \theta_4c$$
+
+Where $\theta_1$ is the "direct" effect and $\beta_1\theta_2$ is the "indirect" effect
+
+
+---
+##Interpretation and Derivative Measures
+
+The three primary estimands of interest are the controlled direct effect (CDE), natural direct effect (NDE), and natural indirect effect (NIE). Using the extended regression model:
+
+$$E(Y|m,a,c) = \theta_0 + \theta_1a + \theta_2m + \theta_3am + \theta_4c$$
+---
+##Controlled Direct Effect 
 
 $$CDE(m) = \theta_1 +\theta_3m(a-a^*)$$
 
 How much the outcome would change on average if the mediator were fixed at level m uniformly in the population but the treatment were changed from level $a^*=0$ to $a=1$ 
 
+$$Y_{a=1,m=m} - Y_{a=0,m=m}$$
+
+In layman's terms:
+
+If we intervened to set the mediator to a certain level what is the effect of intervention?
+
+---
+##Natural Direct Effect
 
 $$NDE = (\theta_1 +\theta_3\beta_0 + \theta_3\beta_1a^* + \theta_3\beta_2c)(a-a^*)$$
-How much the outcome would change if the exposure were set at level $a=1$ vs. $a^*=0$  but for each individual the mediator were kept at the level it would have taken, for that indivdual in the absence of the exposure.
+How much the outcome would change if the exposure were set at level $a=1$ vs. $a^*=0$  but for each individual the mediator were kept at the level it would have taken, for that individual in the absence of the exposure.
+
+$$Y_{a=1,~m=M_0} - Y_{a=0,~m=M_0}$$
+
+In layman's terms: If we intervened to block the effect of a mediator what is the effect of intervention?
+
+---
+## Natural Indirect Effect
 
 $$NIE = (\theta_2\beta_1 + \theta_3\beta_1a)(a-a^*)$$
 How much the outcome would change on average if the exposure were fixed at level a=1 but the mediator were changed from the level it would take if a=0 to the level it would take if a=0
 
----
-## The Assumptions for Confounding
 
--- More complex DAG
+$$Y_{a=1,~m=M_1} - Y_{a=1,~m=M_0}$$
 
---Assumptions
-
--- Your first DAG
-
- 1. No Treatment-Outcome Confounding
- 
--- Your Second DAG
- 2. No Mediator-Outcome Confounding
- 
--- Third DAG
-
- 3. No Treatment-Mediator Confounding
-
--- Fourth DAG
- 4. No Mediator-Outcome confounding that is an effect of treatment (MSM)
- 
+In layman's terms: What is the effect of the intervention by changing the mediator?
 
 
 ---
-##Nonlinear 
+## Dervivates
+
+-- 
+Total effect
+$$ TE = NDE + NIE   $$
+--
+Proportion Mediated
+$$PM = \frac{NIE}{TE} $$
+
+--
+Proportion Eliminated
+$$PE(m) = \frac{TE - CDE(m)}{TE} $$
+
+
+---
+name: Assumptions
+class: center, middle, inverse
+background-image: url(http://bit.ly/arm-greens)
+background-size: cover
+
+
+---
+##Handle Nonlinear Models 
 
 ```{r}
-#DT Table example
+models <- data.frame( Model = c("Continuous", 
+                                       "Binary", 
+                                       "Count",
+                                       "AFT", 
+                                       "PH",
+                                       "Additive Hazard"), 
+                                  
+                              Mediator = c("Y", 
+                                       "Y", 
+                                       "N",
+                                       "N", 
+                                       "N",
+                                       "N"), 
+                              outcome = c("Y", 
+                                       "Y", 
+                                       "Y",
+                                       "Y", 
+                                       "Y",
+                                       "Y"))
+
+kable(models, "html", escape = F) %>% 
+  kable_styling("striped", full_width = F, font_size = 20) 
 ```
 
 
 ---
-##Interaction
+##Integrate Interaction
 
 Example of interaction, principle reason for using counterfactual 
+
+
+---
+name: Assumptions
+class: center, middle, inverse
+background-image: url(http://bit.ly/arm-greens)
+background-size: cover
+
+
+## No Treatment-Outcome Confounding
+
+```{r, out.width = "95%"}
+knitr::include_graphics("uninformative_table.png")
+```
+
+ 
+## No Mediator-Outcome Confounding
+ 
+```{r, out.width = "95%"}
+knitr::include_graphics("uninformative_table.png")
+```
+ 
+
+## No Treatment-Mediator Confounding
+
+```{r, out.width = "95%"}
+knitr::include_graphics("uninformative_table.png")
+```
+
+
+## No Mediator-Outcome Confounding That is an Effect of Treatment
+ 
+```{r, out.width = "95%"}
+knitr::include_graphics("uninformative_table.png")
+```
 
 
 ---
 class: inverse, middle, center
 background-size: contain
 
-# What is mediation analyses
-
-> _"The presence or absence of statistical interaction between two factors depends on the scale with which one chooses to measure their association" -Modern Epidemiology_
-
-
-
+# Mediation Assessment and Heuristics
 
 ---
-## Mediation Assessment and Heuristics
+## A Tale of Two DAGS 
 
--- Good tips and tricks to think about
--- This is specific to mediation but has broader applications to any causal inference problem
+.pull-left[
+
+```{r, out.width = "95%"}
+knitr::include_graphics("uninformative_table.png")
+```
+
+
+]
+.pull-right[
+
+```{r, out.width = "95%"}
+knitr::include_graphics("uninformative_table.png")
+```
+
+
+]
 
 ---
-## A tale of two dags 
+## Assessing Mediation
 
-two dag pics 
+--
+Should you adjust for Z? 
 
-Should I Adjust for Z or no? 
-Even if you or your investigator is not interested in Mediation you could be adjusting for a variable that is on the pathway and therefore creating a biased estimate of your effect
+--
+*Obviously* you wouldn't adjust if it is a mediator but you would adjust of a confounder 
+
+--
+How do you tell? 
+
+--
+Even if you or your investigator is not interested in Mediation *per se* you could be adjusting for a variable that is on the pathway and therefore creating a biased estimate of your effect
 
 
 
 ---
 ## Some good rules of thumb
 
-muddled variables DISTINCT CONSTRUCTS 
+--
+Study design and the paramount importance of time
 
-muddled associations (oncology example)
 
-Although design is not crucial it helps
+--
+Measuring distinct constructs
 
-See a lot of mediation analyses done in cross-sectional data 
 
-Words of advice, mediation is worse for fishing, so most of your work you will need to do is not 
-
-musings on causal estimation vs causal discovery
+--
+Causal discovery? And the fishing problem
 
 
 ---

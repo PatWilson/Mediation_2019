@@ -1,0 +1,258 @@
+---
+title: "Creating DAGs for Talk using ggdag in windows"
+output: html_document
+---
+
+```{r}
+library(ggdag)
+knitr::opts_chunk$set(root.dir ="Y:\\private\\github\\Mediation_2019\\")
+
+```
+
+
+
+```{r}
+
+#Title
+
+coords <- list(
+  x = c(M= 1, E= 2, D = 3, i = 4, A = 5, T = 6, I = 7, O = 8, N = 9),
+  y = c(M= 0,E= 0,D = 0,i = 0,A = 0,T = 0,I = 0,O = 0,N = 0)
+)
+
+ 
+dag <- dagify(E ~ M,
+              D ~ E,
+              i ~ D, 
+              A ~ i,
+              T ~ A,
+              I ~ T,
+              O ~ I,
+              N ~ O,
+             coords = coords) %>% 
+        tidy_dagitty()
+
+
+
+g <- ggdag(dag) + 
+  geom_dag_point(colour = "#ed4204") +
+  geom_dag_edges(edge_colour = "white") +
+  geom_dag_text(col = "white") +
+  # set transparency
+    theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)
+        )
+g
+```
+
+
+
+```{r}
+
+#Mediation
+mt <-ggdag_mediation_triangle(x_y_associated = TRUE) + 
+  geom_dag_point(colour = "#ed4204") +
+  geom_dag_text(col = "white") +
+  # set transparency
+    theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)
+        )
+
+#Confounder
+ct <-ggdag_confounder_triangle(x_y_associated = TRUE) + 
+  geom_dag_point(colour = "#ed4204") +
+  geom_dag_text(col = "white") +
+  # set transparency
+    theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)
+        )
+
+#Mediation where M is replaced with Z
+medz_xy <- tibble::tribble(
+  ~name, ~x,  ~y,
+  "y",    3,   0,
+  "z",    2,   1,
+  "x",    1,   0
+)
+mediator_z <- dagify(z ~ x,
+                    y ~ x + z,
+                    coords = medz_xy) %>% 
+  ggdag() + 
+  geom_dag_point(colour = "#ed4204") +
+  geom_dag_text(col = "white") +
+  # set transparency
+    theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)
+        )
+
+
+mediator_z
+mt
+ct
+```
+
+
+### Different Counfounder assumptions 
+```{r}
+#1 exposure-outcome confounder
+
+# set coordinates
+med1_xy <- tibble::tribble(
+  ~name, ~x,  ~y,
+  "Y",    3,   0,
+  "M",    2,   0,
+  "A",    1,   0.5,
+  "C1",   2,   1
+)
+
+
+mediator_confound1 <- dagify(A ~ C1 ,
+                             M ~ A,
+                             Y ~ A + M + C1,
+                             coords = med1_xy) %>% 
+  ggdag() + 
+  geom_dag_point(colour = "#ed4204") +
+  geom_dag_text(col = "white") +
+  # set transparency
+    theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)
+        )
+mediator_confound1
+
+
+#2 mediator-outcome confounder
+
+
+# set coordinates
+med2_xy <- tibble::tribble(
+  ~name, ~x,  ~y,
+  "Y",    3,   0,
+  "M",    2,   0,
+  "A",    1,   0.5,
+  "C1",   2,   1,
+  "C2",   2.5, -1
+)
+
+
+mediator_confound2 <- dagify(A ~ C1 ,
+                             M ~ C2 + A,
+                             Y ~ A + M + C1 + C2,
+                             coords = med2_xy) %>% 
+  ggdag() + 
+  geom_dag_point(colour = "#ed4204") +
+  geom_dag_text(col = "white") +
+  # set transparency
+    theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)
+        )
+mediator_confound2
+
+
+#3 exposure-mediator confounder
+
+
+# set coordinates
+med3_xy <- tibble::tribble(
+  ~name, ~x,  ~y,
+  "Y",    3,   0,
+  "M",    2,   0,
+  "A",    1,   0.5,
+  "C1",   2,   1,
+  "C2",   2.5, -1,
+  "C3",   1,    0
+)
+
+
+mediator_confound3 <- dagify(A ~ C1 + C3,
+                     M ~ C2 + A + C3,
+                     Y ~ A + M + C1 + C2,
+                     coords = med3_xy) %>% 
+  ggdag() + 
+  geom_dag_point(colour = "#ed4204") +
+  geom_dag_text(col = "white") +
+  # set transparency
+    theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)
+        )
+mediator_confound3
+
+
+
+#4 MSM assumption
+# set coordinates
+med4_xy <- tibble::tribble(
+  ~name, ~x,  ~y,
+  "Y",    3,   0,
+  "M",    2,   0,
+  "A",    1,   0.5,
+  "L",   2, -1
+)
+
+mediator_confound4 <- dagify(L ~ A,
+                             M ~ L + A,
+                             Y ~ A + M + L,
+                             coords = med4_xy) %>% 
+  ggdag() + 
+  geom_dag_point(colour = "#ed4204") +
+  
+  geom_dag_text(col = "white") +
+  # set transparency
+    theme(
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)
+        )
+mediator_confound4
+
+
+```
+
+
+
+
+## Plot those DAGs
+```{r}
+
+ggsave("mediation_title.png", g, dpi = 500,  bg = "transparent")
+
+
+#Triangle
+ggsave("mediation_triangle.png", mt, dpi = 500,  bg = "transparent")
+ggsave("confounder_triangle.png", ct, dpi = 500,  bg = "transparent")
+ggsave("mediation_z.png", mediator_z, dpi = 500,  bg = "transparent")
+
+#Confounding Assumptions
+ggsave("mediator_confound1.png", mediator_confound1, dpi = 500,  bg = "transparent")
+ggsave("mediator_confound2.png", mediator_confound2, dpi = 500,  bg = "transparent")
+ggsave("mediator_confound3.png", mediator_confound3, dpi = 500,  bg = "transparent")
+ggsave("mediator_confound4.png", mediator_confound4, dpi = 500,  bg = "transparent")
+
+```
+
+
+```{r}
+sessionInfo()
+```
+

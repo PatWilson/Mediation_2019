@@ -13,26 +13,24 @@ background-size: cover
 
 <img src="mediation_title.png"/>
 
-Patrick Wilson | Causal Inference Forum | May 17, 2019
+Patrick Wilson | Causal Inference Forum | May 15, 2019
 
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(echo = FALSE)
 
-library(arsenal)
-library(tidyverse)
-library(broom)
 library(knitr)
 library(kableExtra)
 library(xaringanthemer)
 
-duo(primary_color = "#1F4257", secondary_color = "#F97B64",
+duo(primary_color = "#f9fbff", secondary_color = "#ff4300",
     title_slide_text_color = "#ffffff",
-  header_font_google = google_font("Josefin Sans"),
-  text_font_google   = google_font("Montserrat", "300", "300i"),
-  code_font_google   = google_font("Droid Mono")
-  
+  header_font_google = google_font("Merriweather"),
+  text_font_google   = google_font("Poppins", "300", "300i"),
+  code_font_google   = google_font("Droid Mono"),
+  inverse_text_color ="#ffffff",
+  inverse_header_color = "#ffffff"
 )
 
 
@@ -40,24 +38,21 @@ duo(primary_color = "#1F4257", secondary_color = "#F97B64",
 
 
 ---
-name: greens-cover
-class: center, middle, inverse
+class: inverse, center, middle
 background-image: url(lance-grandahl-1058975-unsplash.jpg)
 background-size: cover
-
-
 # What We Hope to Go Over
 
 
 ---
-# Objectives
+# What We Hope to Go Over
 
 --
 - Background 
 
 --
 
-- Causal Estimands and DAGS
+- Causal Estimands and DAGs
 
 --
 
@@ -66,7 +61,7 @@ background-size: cover
 
 --
 
-- Example of Mediation Analyses
+- Implementation
 
 --
 
@@ -81,7 +76,7 @@ background-size: cover
 
 
 ---
-## Overview 
+## Background  
 --
 
 - Mediation seeks to describe the mechanism by which a cause affects an outcome
@@ -101,12 +96,15 @@ background-size: cover
 
 
 ---
-## What does Causal inference add?
+## What Does Causal Inference Add?
 
 --
 
 - Mediation is inherently a causal question, and additional assumptions are needed
-Baron and Kenny approach limitations with respect to interactions and nonlinearitiies
+
+--
+
+- Baron and Kenny approach limitations with respect to interactions and nonlinearitiies
 
 --
 
@@ -118,18 +116,6 @@ Baron and Kenny approach limitations with respect to interactions and nonlineari
 
 
 ---
-##Benefits Include....
-
---
-
-- Principled approach that states assumptions clearly
-
---
-
-- PO framework is generalized so models can be easily extended to handle nonlinearities and interactions
-
-
----
 class: inverse, middle, center
 background-image: url(lance-grandahl-1058975-unsplash.jpg)
 background-size: cover
@@ -137,27 +123,38 @@ background-size: cover
 # What kind of questions can you ask?
 
 ---
-## Pain Example
+class: middle, center
+## Pain
+
+>*HEy*
+
 
 ---
+class: middle, center 
 ## Depression
 
 > *A randomized cognitive behavioral therapy (CBT) intervention estimated an effect on depression symptoms after 3 months of follow up. However, it was noted that the intervention also had an effect on adherance to their antidepressants regimen. Did the beneficial effect of CBT on depressive symptoms because it led to  antidepressant adherance or did CBT affect depressive symptoms through other pathways?*
 
 ---
+class: middle, center
 ## Clinical Biomarker
 
 > *For example, if one wishes to evaluate an intervention on smoking in the prevention of cardiovascular disease. A possible mechanism is that smoking impacts changes in lipid levels causing hyperlipidemia. One might ask what fraction of smoking's effect could be eliminated by eliminating hyperlipdemia through diet and or medication.*  
 
 ---
+class: middle, center
 ## Reproductive Epidemiology
 
 > *A recent analysis focused on the mediating effects relating placental abruption (exposure) and perinatal mortality (outcome) through the role of preterm delivery (mediator). The investigators sought to address 2 important issues: 1) Is the increased risk of mortality in relation to abruption entirely dependent (i.e., mediated) on preterm delivery? and 2) If not, what proportion of the increased mortality risk is directly the consequence of abruption through pathways other than preterm delivery?*
 
 ---
-## Social Epidemiology Example
+class: middle, center
+## Social Epidemiology
+
+>*In health dsparities research when comparing outcomes across racial groups, often using a regression with race in the model one might also control for socioecnomic stauts (SES) later in life. For a variety of negative health outcomes SES is routinely considered to be an intermediate of race. How would one interpret a "direct" effect.*
 
 ---
+class: middle, center
 ## Genetic Epidemiology 
 
 > *Research has found associations between genetic variants on chromosome 15q25.1 and lung cancer. These variants were also known to be associated with smoking. Not only was there a hypothesis of mediation but also that the variant may increase indivduals'vulnerability to the harmful effect of smoking (gene-environment interaction).* 
@@ -167,7 +164,7 @@ class: inverse, middle, center
 background-image: url(lance-grandahl-1058975-unsplash.jpg)
 background-size: cover
 
-# Causal Estimands and DAGS 
+# Causal Estimands and DAGs 
 
 ---
 ## The DAG
@@ -179,7 +176,7 @@ knitr::include_graphics("mediation_triangle.png")
 
 
 ---
-## Estimands 
+## Estimands and the Regression Approach
 
 -The Baron/Kenny model is actually two regression models 
 
@@ -250,15 +247,36 @@ $$PM = \frac{NIE}{TE} $$
 --
 Proportion Eliminated
 $$PE(m) = \frac{TE - CDE(m)}{TE} $$
+---
+class: inverse, middle, center
+background-image: url(lance-grandahl-1058975-unsplash.jpg)
+background-size: cover
+
+# Implementation of Mediation 
+
+---
+##Implementation
+
+--
+
+- Regression Analytic Approach
+
+--
+
+- Simulation Approach
 
 
+--
 
+- Bayesian Approach
 
 
 ---
-##Handle Nonlinear Models 
+class: middle, center
+##Handle Nonlinear Models  
 
 ```{r}
+
 models <- data.frame( Model = c("Continuous", 
                                        "Binary", 
                                        "Count",
@@ -280,9 +298,12 @@ models <- data.frame( Model = c("Continuous",
                                        "Y"))
 
 kable(models, "html", escape = F) %>% 
-  kable_styling("striped", full_width = F, font_size = 20) 
+  kable_styling("striped", full_width = F, font_size = 15) 
 ```
 
+```{r, out.width = "80%"}
+knitr::include_graphics("simulation_table.PNG")
+```
 
 ---
 ##Integrate Interaction
@@ -301,26 +322,26 @@ background-size: cover
 #Assumptions
 
 ---
-## No Treatment-Outcome Confounding
+### No Treatment-Outcome Confounding
 ```{r, med1, out.width = "95%"}
 knitr::include_graphics("mediator_confound1.png")
 ```
 
 ---
 --- 
-## No Mediator-Outcome Confounding
+### No Mediator-Outcome Confounding
 ```{r, med2, out.width = "95%"}
 knitr::include_graphics("mediator_confound2.png")
 ```
  
 ---
-## No Treatment-Mediator Confounding
+### No Treatment-Mediator Confounding
 ```{r, med3, out.width = "95%"}
 knitr::include_graphics("mediator_confound3.png")
 ```
 
 ---
-## No Mediator-Outcome Confounding That is an Effect of Treatment
+### No Mediator-Outcome Confounding That is an Effect of Treatment
 ```{r, med4, out.width = "95%"}
 knitr::include_graphics("mediator_confound4.png")
 ```
@@ -328,29 +349,26 @@ knitr::include_graphics("mediator_confound4.png")
 
 ---
 class: inverse, middle, center
+background-image: url(lance-grandahl-1058975-unsplash.jpg)
 background-size: contain
 
 # Mediation Assessment and Heuristics
 
 ---
-## A Tale of Two DAGS 
+## A Tale of Two DAGs 
 
-.pull-left[
 
 ```{r}
-knitr::include_graphics("mediation_triangle.png")
+knitr::include_graphics("mediation_z.png")
 ```
 
+---
+## A Tale of Two DAGs
 
-]
-.pull-right[
 
 ```{r}
 knitr::include_graphics("confounder_triangle.png")
 ```
-
-
-]
 
 
 ---
@@ -375,7 +393,7 @@ knitr::include_graphics("confounder_triangle.png")
 
 
 ---
-## Some good rules of thumb
+## Some Good Rules of Thumb
 
 --
 
@@ -393,26 +411,20 @@ knitr::include_graphics("confounder_triangle.png")
 
 
 ---
-## Data example 
-
-
-
-```{r}
-#put awesome data here 
-```
-
-
-
----
 ##Software
 
-- Mediation macro TW LW
-- Proc casualmed 
-- mediation in R
+- [SAS Mediation Macro (Regression Approach)](https://www.hsph.harvard.edu/tyler-vanderweele/tools-and-tutorials/)
 
+- [Proc casualmed (SAS)](https://support.sas.com/rnd/app/stat/procedures/causalmed.html)
 
+- [mediation in R (simulation approach)](https://cran.r-project.org/web/packages/mediation/vignettes/mediation.pdf)
 
+- [Rjags](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2885293/) & [RStan](https://bookdown.org/ajkurz/recoding_Hayes_2018/) 
 
 ---
 ##References
 
+
+VanderWeele 2015. Explanation in causal inference: methods for mediation and interaction, 1st edition Oxford, New York.
+
+[Imai K, Keele L, Tingley D (2010a). "A General Approach to Causal Mediation Analysis." Psychological Methods, 15(4), 309–334.](https://imai.fas.harvard.edu/research/files/BaronKenny.pdf)

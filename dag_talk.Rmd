@@ -10,7 +10,6 @@ knitr::opts_chunk$set(root.dir ="Y:\\private\\github\\Mediation_2019\\")
 ```
 
 
-
 ```{r}
 
 #Title
@@ -35,7 +34,7 @@ dag <- dagify(E ~ M,
 
 
 g <- ggdag(dag) + 
-  geom_dag_point(colour = "#ed4204") +
+  geom_dag_point(size= 20, colour = "#ed4204") +
   geom_dag_edges(edge_colour = "white") +
   geom_dag_text(col = "white") +
   # set transparency
@@ -53,8 +52,18 @@ g
 ```{r}
 
 #Mediation
-mt <-ggdag_mediation_triangle(x_y_associated = TRUE) + 
-  geom_dag_point(colour = "#ed4204") +
+med_xy <- tibble::tribble(
+  ~name, ~x,  ~y,
+  "Y",    3,   0,
+  "M",    2,   1,
+  "A",    1,   0
+)
+mt <- dagify(M ~ A,
+            Y ~ A + M,
+            coords = med_xy) %>% 
+  ggdag() + 
+  geom_dag_point(size= 20,colour = "#ed4204") +
+  geom_dag_edges(edge_width = 1.2) +
   geom_dag_text(col = "white") +
   # set transparency
     theme(
@@ -65,8 +74,18 @@ mt <-ggdag_mediation_triangle(x_y_associated = TRUE) +
         )
 
 #Confounder
-ct <-ggdag_confounder_triangle(x_y_associated = TRUE) + 
-  geom_dag_point(colour = "#ed4204") +
+ct_xy <- tibble::tribble(
+  ~name, ~x,  ~y,
+  "Y",    3,   0,
+  "Z",    2,   1,
+  "A",    1,   0
+)
+ct <- dagify(A ~ Z,
+                    Y ~ A + Z,
+                    coords = ct_xy) %>% 
+  ggdag() + 
+  geom_dag_point(size= 20,colour = "#ed4204") +
+  geom_dag_edges(edge_width = 1.2) +
   geom_dag_text(col = "white") +
   # set transparency
     theme(
@@ -76,18 +95,20 @@ ct <-ggdag_confounder_triangle(x_y_associated = TRUE) +
         plot.background = element_rect(fill = "transparent",colour = NA)
         )
 
+
 #Mediation where M is replaced with Z
 medz_xy <- tibble::tribble(
   ~name, ~x,  ~y,
-  "y",    3,   0,
-  "z",    2,   1,
-  "x",    1,   0
+  "Y",    3,   0,
+  "Z",    2,   1,
+  "A",    1,   0
 )
-mediator_z <- dagify(z ~ x,
-                    y ~ x + z,
+mediator_z <- dagify(Z ~ A,
+                    Y ~ A + Z,
                     coords = medz_xy) %>% 
   ggdag() + 
-  geom_dag_point(colour = "#ed4204") +
+  geom_dag_point(size= 20,colour = "#ed4204") +
+  geom_dag_edges(edge_width = 1.2) +
   geom_dag_text(col = "white") +
   # set transparency
     theme(

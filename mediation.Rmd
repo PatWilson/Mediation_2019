@@ -32,8 +32,6 @@ duo(primary_color = "#f9fbff", secondary_color = "#ff4300",
   inverse_text_color ="#ffffff",
   inverse_header_color = "#ffffff"
 )
-
-
 ```
 
 
@@ -56,12 +54,11 @@ background-size: cover
 
 --
 
-- Mediation Assessment and Heuristics
-
+- Implementation
 
 --
 
-- Implementation
+- Assessment and Heuristics
 
 --
 
@@ -79,40 +76,41 @@ background-size: cover
 ## Background  
 --
 
-- Mediation seeks to describe the mechanism by which a cause affects an outcome
+- Mediation seeks to describe the *mechanism* by which a cause affects an outcome
 
 --
 
-- In this model an intervention is theorized to affect an outcome through another variable known as a mediator
+- In this model, an intervention is theorized to affect an outcome through another variable known as a mediator
 
 --
 
-- One can then decompose intervention effects into through changing the mediator which changes the outcome (indirect effect) and through some other mechinanism or set of mechanisms (direct effect)
+- One can then decompose intervention effects into two pathways:
+ 1. Through changing the mediator which changes the outcome **(indirect effect)** 
+ 2. Through some other mechanism **(direct effect)**
 
 --
 
-- Formalized in Baron & Kenny with linear regression (1986) 
-
+- Formalized in Baron & Kenny (1986) with linear regression 
 
 
 ---
-## What Does Causal Inference Add?
+## Causal Mediation Analyses
 
 --
 
-- Mediation is inherently a causal question, and additional assumptions are needed
+- Greenland, Robins, and Pearl formulated causal mediation analyses and developed the causal equivalent of direct and indirect effects.
 
 --
 
-- Baron and Kenny approach limitations with respect to interactions and nonlinearitiies
+- Makes sense to try to measure mediation through a potential outcome or counterfactual framework
 
 --
 
-- Given this notion it is makes sense to try to measure mediation through a potential outcome or counterfactual framework
+- As a "general" method it surpasses the Baron and Kenny approach with respect to interactions and nonlinearities
 
 --
 
-- Greenland, Robins, and Pearl formulated Causal mediation analyses and developed the causal notion of direct effect and indirect effect.
+- Also additional assumptions are needed with mediation analyses, so the ability to encode confounding control in a straightforward way is critically important 
 
 
 ---
@@ -123,41 +121,16 @@ background-size: cover
 # What kind of questions can you ask?
 
 ---
-class: middle, center
-## Pain
-
->*HEy*
-
-
----
 class: middle, center 
-## Depression
+## Example (Depression)
 
-> *A randomized cognitive behavioral therapy (CBT) intervention estimated an effect on depression symptoms after 3 months of follow up. However, it was noted that the intervention also had an effect on adherance to their antidepressants regimen. Did the beneficial effect of CBT on depressive symptoms because it led to  antidepressant adherance or did CBT affect depressive symptoms through other pathways?*
-
----
-class: middle, center
-## Clinical Biomarker
-
-> *For example, if one wishes to evaluate an intervention on smoking in the prevention of cardiovascular disease. A possible mechanism is that smoking impacts changes in lipid levels causing hyperlipidemia. One might ask what fraction of smoking's effect could be eliminated by eliminating hyperlipdemia through diet and or medication.*  
+> *A randomized cognitive behavioral therapy (CBT) intervention estimates an effect on depression symptoms after 3 months of follow up. However, investigators noticed that the intervention increased the use of antidepressants. Did CBT work on depressive symptoms because it led to antidepressant adherence or did CBT affect depressive symptoms through other pathways?*
 
 ---
 class: middle, center
-## Reproductive Epidemiology
+## Example (Genetic Epidemiology) 
 
-> *A recent analysis focused on the mediating effects relating placental abruption (exposure) and perinatal mortality (outcome) through the role of preterm delivery (mediator). The investigators sought to address 2 important issues: 1) Is the increased risk of mortality in relation to abruption entirely dependent (i.e., mediated) on preterm delivery? and 2) If not, what proportion of the increased mortality risk is directly the consequence of abruption through pathways other than preterm delivery?*
-
----
-class: middle, center
-## Social Epidemiology
-
->*In health dsparities research when comparing outcomes across racial groups, often using a regression with race in the model one might also control for socioecnomic stauts (SES) later in life. For a variety of negative health outcomes SES is routinely considered to be an intermediate of race. How would one interpret a "direct" effect.*
-
----
-class: middle, center
-## Genetic Epidemiology 
-
-> *Research has found associations between genetic variants on chromosome 15q25.1 and lung cancer. These variants were also known to be associated with smoking. Not only was there a hypothesis of mediation but also that the variant may increase indivduals'vulnerability to the harmful effect of smoking (gene-environment interaction).* 
+> *Research has found associations between genetic variants on chromosome 15q25.1 and lung cancer. These variants were also known to be associated with smoking. Not only was there a hypothesis of mediation but also that the variant may increase indivduals' vulnerability to the harmful effect of smoking (gene-environment interaction).* 
 
 ---
 class: inverse, middle, center
@@ -167,42 +140,58 @@ background-size: cover
 # Causal Estimands and DAGs 
 
 ---
-## The DAG
-```{r, out.width = "85%"}
+## The Directed Acyclic Graph (DAG)
+```{r, fig.align='center', out.width = "90%"}
+knitr::include_graphics("mediation_triangle.png")
+```
+
+---
+## Regression
+
+```{r, fig.align='center', out.width = "45%"}
 knitr::include_graphics("mediation_triangle.png")
 ```
 
 
-
-
----
-## Estimands and the Regression Approach
-
--The Baron/Kenny model is actually two regression models 
+- Consists of two regression models. A mediator $M$ model and outcome $Y$ model for an intervention $a$ adjusted by a covariate or set of covariates $c$.
 
 
 $$E(M|a,c) = \beta_0 + \beta_1a + \beta_2c$$
 
 
-$$E(Y|m,a,c) = \theta_0 + \theta_1a + \theta_2m + \theta_4c$$
+$$E(Y|m,a,c) = \theta_0 + \theta_1a + \theta_2m + \theta_3c$$
 
-Where $\theta_1$ is the "direct" effect and $\beta_1\theta_2$ is the "indirect" effect
+Where $\theta_1$ is the "direct" effect and $\beta_1*\theta_2$ is the "indirect" effect
+
+
 
 
 ---
-##Interpretation and Derivative Measures
+##Interpretation
 
-The three primary estimands of interest are the controlled direct effect (CDE), natural direct effect (NDE), and natural indirect effect (NIE). Using the extended regression model:
+--
 
-$$E(Y|m,a,c) = \theta_0 + \theta_1a + \theta_2m + \theta_3am + \theta_4c$$
+- The three primary estimands of interest are the controlled direct effect (CDE), natural direct effect (NDE), and natural indirect effect (NIE). 
+
+--
+
+- We will use the potential outcome framework to demonstrate. Briefly, for a particular intervention $A$, $Y_{a}$ is the outcome if $A$ were set to $a$
+
+--
+
+- For causal mediation this outcome is further extended to incorporate a mediator, $M$
+  
+$$Y_{a=a,m=m}$$ 
+  
+
+
 ---
 ##Controlled Direct Effect 
 
-$$CDE(m) = \theta_1 +\theta_3m(a-a^*)$$
 
-How much the outcome would change on average if the mediator were fixed at level m uniformly in the population but the treatment were changed from level $a^*=0$ to $a=1$ 
+How much the outcome would change on average if the mediator were fixed at level $m$ uniformly in the population but the treatment were changed from level $a^*=0$ to $a=1$ 
 
-$$Y_{a=1,m=m} - Y_{a=0,m=m}$$
+$$E(Y_{a=1,m=m} - Y_{a=0,m=m})$$
 
 In layman's terms:
 
@@ -211,23 +200,22 @@ In layman's terms:
 ---
 ##Natural Direct Effect
 
-$$NDE = (\theta_1 +\theta_3\beta_0 + \theta_3\beta_1a^* + \theta_3\beta_2c)(a-a^*)$$
 How much the outcome would change if the exposure were set at level $a=1$ vs. $a^*=0$  but for each individual the mediator were kept at the level it would have taken, for that individual in the absence of the exposure.
 
-$$Y_{a=1,~m=M_0} - Y_{a=0,~m=M_0}$$
+$$E(Y_{a=1,~m=M_0} - Y_{a=0,~m=M_0})$$
 
 In layman's terms: 
 
-*If we intervened to block the effect of a mediator what is the effect of intervention?*
+*If we set the mediator to control levels what intervention effect would we see?*
 
 ---
 ## Natural Indirect Effect
 
-$$NIE = (\theta_2\beta_1 + \theta_3\beta_1a)(a-a^*)$$
-How much the outcome would change on average if the exposure were fixed at level a=1 but the mediator were changed from the level it would take if a=0 to the level it would take if a=0
+
+How much the outcome would change on average if the exposure were fixed at level $a=1$ but the mediator were changed from the level it would take if $a=0$ to the level it would take if $a=1$
 
 
-$$Y_{a=1,~m=M_1} - Y_{a=1,~m=M_0}$$
+$$E(Y_{a=1,~m=M_1} - Y_{a=1,~m=M_0})$$
 
 In layman's terms: 
 
@@ -235,18 +223,58 @@ In layman's terms:
 
 
 ---
-## Dervivates
+## Derivative Measures
 
 --
-Total effect
-$$ TE = NDE + NIE   $$
+
+- Total effect
+
+$$TE = NDE + NIE$$
 --
-Proportion Mediated
-$$PM = \frac{NIE}{TE} $$
+
+- Proportion mediated
+
+$$PM = \frac{NIE}{TE}$$
 
 --
-Proportion Eliminated
-$$PE(m) = \frac{TE - CDE(m)}{TE} $$
+
+- Proportion Eliminated
+
+$$PE(m) = \frac{TE - CDE(m)}{TE}$$
+
+---
+class: center, middle, inverse
+background-image: url(lance-grandahl-1058975-unsplash.jpg)
+background-size: cover
+
+#Assumptions
+
+---
+### No Treatment-Outcome Confounding
+```{r, med1, fig.align='center', out.width = "95%"}
+knitr::include_graphics("mediator_confound1.png")
+```
+
+---
+--- 
+### No Mediator-Outcome Confounding
+```{r, med2, fig.align='center', out.width = "95%"}
+knitr::include_graphics("mediator_confound2.png")
+```
+ 
+---
+### No Treatment-Mediator Confounding
+```{r, med3, fig.align='center', out.width = "95%"}
+knitr::include_graphics("mediator_confound3.png")
+```
+
+---
+### No Mediator-Outcome Confounding That is an Effect of Treatment
+```{r, med4, fig.align='center', out.width = "95%"}
+knitr::include_graphics("mediator_confound4.png")
+```
+
+
 ---
 class: inverse, middle, center
 background-image: url(lance-grandahl-1058975-unsplash.jpg)
@@ -258,22 +286,31 @@ background-size: cover
 ##Implementation
 
 --
+1. Regression Analytic Approach
 
-- Regression Analytic Approach
-
---
-
-- Simulation Approach
-
+ + Extending the Baron and Kenny method
+ + Can handle survival analyses, and binary/count data
+ + Requires complex formulas for standard errors or Bootstrap
 
 --
+2. Simulation Approach
 
-- Bayesian Approach
+  + Fit models for the observed outcome and mediator variables.
+  + Simulate model parameters from their sampling distribution.
+  + Simulate potential outcomes
+  + Compute the causal mediation effects.
 
+
+--
+3. Bayesian Approach
+
+  + Principled approach
+  + Extremely Flexible
+  + Need to build fully generative model
 
 ---
 class: middle, center
-##Handle Nonlinear Models  
+##Model Types  
 
 ```{r}
 
@@ -298,53 +335,14 @@ models <- data.frame( Model = c("Continuous",
                                        "Y"))
 
 kable(models, "html", escape = F) %>% 
-  kable_styling("striped", full_width = F, font_size = 15) 
+  kable_styling("striped", full_width = F, font_size = 12) 
 ```
 
-```{r, out.width = "80%"}
+```{r, out.width = "70%"}
 knitr::include_graphics("simulation_table.PNG")
 ```
 
----
-##Integrate Interaction
 
---
-Example of interaction, principle reason for using counterfactual 
-
-
-
-
----
-class: center, middle, inverse
-background-image: url(lance-grandahl-1058975-unsplash.jpg)
-background-size: cover
-
-#Assumptions
-
----
-### No Treatment-Outcome Confounding
-```{r, med1, out.width = "95%"}
-knitr::include_graphics("mediator_confound1.png")
-```
-
----
---- 
-### No Mediator-Outcome Confounding
-```{r, med2, out.width = "95%"}
-knitr::include_graphics("mediator_confound2.png")
-```
- 
----
-### No Treatment-Mediator Confounding
-```{r, med3, out.width = "95%"}
-knitr::include_graphics("mediator_confound3.png")
-```
-
----
-### No Mediator-Outcome Confounding That is an Effect of Treatment
-```{r, med4, out.width = "95%"}
-knitr::include_graphics("mediator_confound4.png")
-```
 
 
 ---
@@ -358,7 +356,7 @@ background-size: contain
 ## A Tale of Two DAGs 
 
 
-```{r}
+```{r, fig.align='center'}
 knitr::include_graphics("mediation_z.png")
 ```
 
@@ -366,7 +364,7 @@ knitr::include_graphics("mediation_z.png")
 ## A Tale of Two DAGs
 
 
-```{r}
+```{r, fig.align='center'}
 knitr::include_graphics("confounder_triangle.png")
 ```
 
@@ -376,7 +374,7 @@ knitr::include_graphics("confounder_triangle.png")
 
 --
 
-- Should you adjust for Z? 
+- In which scenario should you adjust for Z? Both? Neither?
 
 --
 
@@ -407,7 +405,7 @@ knitr::include_graphics("confounder_triangle.png")
 
 --
 
-- Causal discovery? And the fishing problem
+- Causal discovery and exacerbation of the fishing problem
 
 
 ---
@@ -415,7 +413,7 @@ knitr::include_graphics("confounder_triangle.png")
 
 - [SAS Mediation Macro (Regression Approach)](https://www.hsph.harvard.edu/tyler-vanderweele/tools-and-tutorials/)
 
-- [Proc casualmed (SAS)](https://support.sas.com/rnd/app/stat/procedures/causalmed.html)
+- [proc causalmed (SAS)](https://support.sas.com/rnd/app/stat/procedures/causalmed.html)
 
 - [mediation in R (simulation approach)](https://cran.r-project.org/web/packages/mediation/vignettes/mediation.pdf)
 
@@ -427,4 +425,13 @@ knitr::include_graphics("confounder_triangle.png")
 
 VanderWeele 2015. Explanation in causal inference: methods for mediation and interaction, 1st edition Oxford, New York.
 
-[Imai K, Keele L, Tingley D (2010a). "A General Approach to Causal Mediation Analysis." Psychological Methods, 15(4), 309–334.](https://imai.fas.harvard.edu/research/files/BaronKenny.pdf)
+[Imai K, Keele L, Tingley D (2010). "A General Approach to Causal Mediation Analysis." Psychological Methods, 15(4), 309–334.](https://imai.fas.harvard.edu/research/files/BaronKenny.pdf)
+
+[Robins JM, Greenland S (1992). "Identifiability and Exchangeability for Direct and Indirect Effects." Epidemiology, 3(2), 143–155.](https://www.ncbi.nlm.nih.gov/pubmed/1576220/)
+
+[Vanderweele TJ, Asomaning K, Tchetgen Tchetgen EJ, Han Y, Spitz MR, Shete S, et al. Genetic variants on 15q25.1, smoking, and lung cancer: an assessment of mediation and interaction. Am J Epidemiol. 2012;175:1013–1020.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3353137/)
+
+---
+class: middle, center
+<img src="https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif"/>
+
